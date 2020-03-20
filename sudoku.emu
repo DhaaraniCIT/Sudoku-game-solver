@@ -1,0 +1,738 @@
+org 100h
+
+include 'emu8086.inc'
+
+TABLE  DB 0, 0, 2, 3, 0, 3, 0, 0, 4, 0, 0, 0, 0, 2, 0, 0   ;NORMAL
+
+table1 dw ?,?,?,?,?,?,?,?,?,?,?,?
+
+ans db ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?     
+
+TABLE2  DB 0, 0, 2, 3, 0, 3, 0, 0, 4, 0, 0, 0, 0, 2, 0, 0 
+
+newl db 0AH,0DH,"$" 
+
+k db 0
+
+i db ?       
+
+j dw ?    
+
+lea di,ans
+
+mov si,offset table
+
+mov cx,16     
+
+mov ax,0
+
+print 'SuDoKu'
+    
+loopa:  call load
+        
+        jz zero
+        
+        inc si
+        
+        loop loopa 
+        
+        jmp loopjjj
+zero:
+    
+        mov table1,bx
+        
+        ;mov dx,bx
+        
+        inc si
+        
+        inc j
+        
+        inc table1
+        
+        loop loopa
+        
+loopjjj:
+
+printn 
+
+print 'Question'        
+
+MOV SI, OFFSET TABLE
+
+call display
+
+lea bp,ans
+
+mov ax,0
+
+mov si,offset table
+
+mov cx,16
+
+mov dx,1
+
+mov di,0
+
+loopc:  mov bx,si
+        
+        mov al, table[di]   
+        
+        cmp al,0
+        
+        jz zerooo
+        
+        inc si
+        
+        inc di
+        
+        loop loopc 
+        
+        jmp loopj
+zerooo: 
+        cmp bl,0
+        
+        JZ CHECK1R
+    
+        cmp bl,1
+        
+        JZ CHECK2R
+    
+        cmp bl,2
+    
+        JZ CHECK3R
+        
+        cmp bl,3
+    
+        JZ CHECK4R
+        
+        cmp bl,4
+    
+        JZ CHECK1R
+        
+        cmp bl,5
+    
+        JZ CHECK2R
+        
+        cmp bl,6
+    
+        JZ CHECK3R
+        
+        cmp bl,7
+    
+        JZ CHECK4R
+        
+        cmp bl,8
+    
+        JZ CHECK1R
+        
+        cmp bl,9  
+    
+        JZ CHECK2R
+        
+        cmp bl,10
+        
+        JZ CHECK3R
+    
+        cmp bl,11
+    
+        JZ CHECK4R
+        
+        cmp bl,12
+    
+        JZ CHECK1R
+        
+        cmp bl,13
+    
+        JZ CHECK2R
+        
+        cmp bl,14
+    
+        JZ CHECK3R
+        
+        cmp bl,15
+    
+        JZ CHECK4R
+        
+printm:   
+
+mov dx,0   
+
+mov cx,j
+
+mov si,offset table1   
+
+lea di,ans
+
+mov bl,0
+
+mov al,0
+
+printn 
+
+print 'Enter your answers in left to right order!!!'
+
+input:
+      
+      printn
+      print 'Enter the number :'
+      printn
+      ;call print_num 
+      ;call scan_num 
+      MOV AH, 1
+      INT 21H 
+      sub al,30h
+      mov [si],al 
+      mov bl,[di]
+      inc si
+      inc di
+      cmp bl,al
+      jne label1
+      loop input
+      
+display1:
+     
+mov si,offset table2
+
+mov di,offset table1
+
+mov cx,16
+
+mov ax,0
+
+loopb: 
+        mov al,[si]
+        
+        cmp al,0
+        
+        jz zeroo
+        
+        inc si
+        
+        loop loopb
+        
+        jmp display2
+        
+zeroo:
+    
+        mov bl,[di]
+        
+        mov [si],bl        
+        ;mov dx,bx
+        
+        inc si
+        
+        inc di
+        
+        loop loopb 
+        
+display2:
+
+printn 
+
+print 'YOUR ANSWER'
+        
+MOV SI, OFFSET TABLE2
+
+call display 
+
+PRINTN
+
+print 'CORRECT ANSWER'
+
+MOV SI,OFFSET TABLE
+
+CALL display    
+
+jmp decision
+      
+label1:
+
+inc k     
+loop input
+jmp display1
+
+decision:
+
+cmp k,0
+je win
+jmp lose
+
+win:
+
+printn
+print 'congratulation,you win!'
+jmp retw
+
+lose:
+
+printn
+print 'you lose :('
+             
+        
+retw:
+    hlt 
+    
+rand:       
+     mov dx,0
+     
+random: 
+   inc dx
+   
+   cmp dx,4
+   
+   jg rand
+   
+   jmp zerooo 
+           
+CHECK1R:
+        mov al,table[di+1]
+        
+        CMP dx, ax
+
+        je random 
+        
+        mov al,table[di+2]
+
+        CMP dx, ax 
+
+        je random
+                  
+        mov al,table[di+3]          
+                  
+        CMP dx, ax 
+
+        je random
+        
+        cmp bl,0
+        
+        je check1c
+        
+        cmp bl,4
+        
+        je check2c
+        
+        cmp bl,8
+        
+        je check3c
+        
+        cmp bl,12
+        
+        je check4c
+
+CHECK2R:
+        mov al,table[di-1]
+        
+        CMP dx, ax
+
+        je random 
+        
+       mov al, table[di+1]
+
+        CMP dx, ax 
+
+        je random 
+        
+        mov al, table[di+2]
+
+        CMP dx, ax 
+
+        je random 
+        
+        cmp bl,1
+        
+        je check1c
+        
+        cmp bl,5
+        
+        je check2c
+        
+        cmp bl,9
+        
+        je check3c
+        
+        cmp bl,13
+        
+        je check4c
+
+        
+CHECK3R:
+        mov al, table[di-1]
+        
+        CMP dx, ax
+
+        je random 
+        
+        mov al, table[di-2]
+
+        CMP dx, ax 
+
+        je random 
+        
+        mov al, table[di+1]
+
+        CMP dx, ax 
+
+        je random
+        
+        cmp bl,2
+        
+        je check1c
+        
+        cmp bl,6
+        
+        je check2c
+        
+        cmp bl,10
+        
+        je check3c
+        
+        cmp bl,14
+        
+        je check4c
+        
+CHECK4R:
+        mov al, table[di-1]
+        
+        CMP dx, ax
+
+        je random 
+        
+        mov al, table[di-2]
+
+        CMP dx, ax 
+
+        je random 
+        
+        mov al, table[di-3]
+
+        CMP dx, ax 
+
+        je random
+                 
+        cmp bl,3
+        
+        je check1c
+        
+         cmp bl,7
+         
+         je check2c
+         
+         cmp bl,11
+         
+         je check3c
+         
+         cmp bl,15
+         
+         je check4c
+                  
+check1c:mov al, table[di+4]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di+8]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di+12]
+        
+        cmp dx,ax
+        
+        je random
+        
+        cmp bl,0
+        
+        je check
+        
+        cmp bl,2
+        
+        je check
+        
+        cmp bl,1
+        
+        je check1
+        
+        cmp bl,3
+        
+        je check1        
+
+check2c:mov al, table[di+4]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di+8]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di-4]
+        
+        cmp dx,ax
+        
+        je random
+        
+        cmp bl,4
+        
+        je check2
+        
+        cmp bl,5
+        
+        je check3
+        
+        cmp bl,6
+        
+        je check2
+        
+        cmp bl,7
+        
+        je check3 
+        
+check3c:mov al, table[di+4]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di-4]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di-8]
+        
+        cmp dx,ax
+        
+        je random
+        
+        cmp bl,8
+        
+        je check
+        
+        cmp bl,9
+        
+        je check1
+        
+        cmp bl,10
+        
+        je check
+        
+        cmp bl,11
+        
+        je check1 
+        
+check4c:mov al, table[di-4]
+        
+        cmp dx, ax
+        
+        je random
+        
+        mov al, table[di-8]
+        
+        cmp dx, ax
+        
+        je random 
+        
+        mov al, table[di-12]
+        
+        cmp dx,ax
+        
+        je random
+        
+        cmp bl,12
+        
+        je check2
+        
+        cmp bl,13
+        
+        je check3
+        
+        cmp bl,14
+        
+        je check2
+        
+        cmp bl,15
+        
+        je check3
+
+check:mov al, table[di+5]
+
+      cmp dx,ax
+      
+      je random
+     
+      mov table[di],dl
+      
+      mov [bp],dx
+        
+      inc di
+      
+      inc bp  
+      
+      inc si
+        
+      loop loopc          
+
+check1:mov al, table[di+3]
+
+      cmp dx,ax
+      
+      je random
+      
+      mov table[di],dl
+      
+      mov [bp],dx
+        
+        inc di
+        
+        inc bp
+        
+        inc si
+        
+        loop loopc
+        
+check2:mov al, table[di-3]
+
+      cmp dx,ax
+      
+      je random
+      
+      mov table[di],dl
+      
+      mov [bp],dx
+        
+        inc di
+        
+        inc bp
+        
+        inc si
+        
+        loop loopc
+        
+check3:  mov al, table[di-5]
+
+       cmp dx,ax
+       
+       je random
+       
+       mov table[di],dl
+       
+       mov [bp],dx
+        
+        inc di
+        
+        inc bp
+        
+        inc si
+        
+        loop loopc      
+                  
+        jmp printm
+        
+display  PROC
+    
+    mov cx,4            
+loopj:
+        LEA DX,newl 
+
+        MOV AH,9
+
+        INT 21H 
+        
+        print '|----------------|---------------|---------------|---------------|'    
+        
+        mov dx,0  
+        
+         LEA DX,newl 
+
+        MOV AH,9
+
+        INT 21H
+        
+        mov dx,0
+        
+        mov i,4 
+        
+        print '|'
+        
+        mov dx,9h
+        
+        MOV AH, 02H
+
+        INT 21H
+        
+        mov dx,0 
+        
+        loopdx:
+        
+         MOV AX, [SI]
+
+        MOV DX, AX 
+
+        ADD DX, 48D
+
+        MOV AH, 02H
+
+        INT 21H 
+        
+        mov dx,0
+        
+        mov dx,9h
+        
+        MOV AH, 02H
+
+        INT 21H   
+        
+        print ' |' 
+        
+        mov dx,0
+        
+        mov dx,9h
+        
+        MOV AH, 02H
+
+        INT 21H   
+        
+        inc si
+        
+        dec i
+        
+        jnz loopdx
+
+loop loopj
+        
+        mov dx,0
+        
+        LEA DX,newl 
+
+        MOV AH,9
+
+        INT 21H 
+        
+        print '|----------------|---------------|---------------|---------------|'
+         
+ret
+
+display  ENDP
+
+load    PROC
+    
+    mov bx,si
+
+        mov al,[si]
+        
+        cmp al,0
+        
+        RET
+        
+load   ENDP        
+DEFINE_PRINT_NUM
+DEFINE_PRINT_NUM_UNS   
+DEFINE_SCAN_NUM
+end
